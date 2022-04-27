@@ -1,4 +1,3 @@
-from gc import is_finalized
 import threading
 import time
 import requests
