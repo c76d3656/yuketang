@@ -1,7 +1,9 @@
+import threading
 import time
 import requests
 import re
 import json
+from threading import Thread
 
 # 以下的csrftoken和sessionid需要改成自己登录后的cookie中对应的字段！！！！而且脚本需在登录雨课堂状态下使用
 # 登录上雨课堂，然后按F12-->选Application-->找到雨课堂的cookies，寻找csrftoken和sessionid字段，并复制到下面两行即可
@@ -115,7 +117,9 @@ def choose_courses(courses):
     if number==0:
         #0 表示全部刷一遍
         for ins in courses:
-            watch_target_video(ins)
+            temp_thread=threading.Thread(target = watch_target_video,kwargs={"ins":ins})
+            temp_thread.start()
+            temp_thread.join()
     elif number in range(1,len(courses)+1):
         #指定序号的课程刷一遍
         watch_target_video(courses[number-1])
@@ -128,7 +132,9 @@ def choose_courses(courses):
 def watch_target_video(ins):
     homework_dic = get_videos_ids(ins["course_name"],ins["classroom_id"], ins["course_sign"])
     for one_video in homework_dic.items():
-        video_watcher(one_video[0],one_video[1],ins["course_id"],user_id,ins["classroom_id"],ins["sku_id"])
+        temp_thread1 = threading.Thread(target=video_watcher,kwargs={"video_id":one_video[0],"video_name":one_video[1],"cid":ins["course_id"],"user_id":user_id,"classroomid":ins["classroom_id"],"skuid":ins["sku_id"]})
+        temp_thread1.start()
+        # temp_thread1.join()
 
 # 获取视频ID
 def get_videos_ids(course_name,classroom_id,course_sign):
@@ -151,8 +157,8 @@ def get_videos_ids(course_name,classroom_id,course_sign):
         print(course_name+"共有"+str(len(homework_dic))+"个作业喔！")
         return homework_dic
     except:
-        print("无法获取homework_ids,请重重重新运行一次该程序!")
-        raise Exception("无法获取homework_ids,请重重重新运行一次该程序!")
+        print("无法获取video_ids,请重重重新运行一次该程序!")
+        raise Exception("无法获取video_ids,请重重重新运行一次该程序!")
 
 # 观看视频
 def video_watcher(video_id,video_name,cid,user_id,classroomid,skuid):
@@ -184,7 +190,7 @@ def video_watcher(video_id,video_name,cid,user_id,classroomid,skuid):
         heart_data = []
         for i in range(50):
             heart_data.append(
-                {
+                {   # 未作说明或者不是变量的均被写死
                     "c": cid,
                     "cards_id" :0,
                     "cc": video_id,
