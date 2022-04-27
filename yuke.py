@@ -1,3 +1,4 @@
+from gc import is_finalized
 import threading
 import time
 import requests
@@ -25,6 +26,9 @@ global user_id
 user_id = ""
 
 global headers
+
+global is_finished
+is_finished = False
 
 leaf_type = {
     "video": 0,
@@ -111,6 +115,7 @@ def display_your_courses(courses):
 
 # 选择要刷哪门课
 def choose_courses(courses):
+    global is_finished
     number = input("你想刷哪门课呢?请输入编号。输入0表示全部课程都刷一遍\n")
     number = int(number)
     print(len(courses))
@@ -120,9 +125,11 @@ def choose_courses(courses):
             temp_thread=threading.Thread(target = watch_target_video,kwargs={"ins":ins})
             temp_thread.start()
             temp_thread.join()
+            is_finished = True
     elif number in range(1,len(courses)+1):
         #指定序号的课程刷一遍
         watch_target_video(courses[number-1])
+        is_finished = True
     else :
         print("没有这门课捏,请再选一次吧!")
         return True
@@ -273,6 +280,8 @@ if __name__ == "__main__":
         # 显示用户提示
         display_your_courses(your_courses)
         flag = choose_courses(your_courses)
+    if is_finished:
+        input()
 
 
 # 提供每个url请求的标准返回数据
