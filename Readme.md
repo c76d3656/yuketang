@@ -2,8 +2,10 @@
 
 # 雨课堂网课视频脚本代码
 
+## 上课看视频用的是 `https://school-id.yuketang.cn/`这些带学校id的网址，千万别用`https://www.yuketang.cn/`
+
 #
-1. 运行程序
+1. 运行程序(也可通过Release中下载运行)
 ``` python
 python .\yuke.py
 ```
