@@ -2,6 +2,8 @@
 
 # 雨课堂网课视频脚本代码
 
+## 请一定一定要看以下教程！！！
+
 ## 上课看视频用的是 `https://school-id.yuketang.cn/`这些带学校id的网址，千万别用`https://www.yuketang.cn/`
 
 #
@@ -15,7 +17,7 @@ python .\yuke.py
    - 如何获取`cookie`
      1. 在视频播放页面按下`F12`,选择`打开开发者工具`
      2. 在开发者工具最上一栏选择`网络`
-     3. 等待一会，下方出现一个`heartbeat/`的文件
+     3. 等待一会，下方出现一个`heartbeat/`的文件(这时候视频要在播放昂)
      4. `点击`后查找`请求标头`中的`cookie`，如
      ``` 
         cookie: csrftoken=y3O***************gl; sessionid=6****************icn; university_id=****; platform_id=3; user_role=3;JG_d65****************c1_PV=165***************4
